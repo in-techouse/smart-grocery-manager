@@ -14,9 +14,9 @@ import com.example.smartgroceryreminder.R;
 import com.example.smartgroceryreminder.model.databasehelper;
 
 public class AddItem extends AppCompatActivity {
-    EditText product_name, m_date, e_date;
-    databasehelper myDB;
-    Button bt2;
+    private EditText product_name, m_date, e_date;
+    private databasehelper myDB;
+    private Button bt2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
