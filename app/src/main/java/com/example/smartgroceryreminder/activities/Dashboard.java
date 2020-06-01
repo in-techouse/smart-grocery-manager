@@ -54,7 +54,8 @@ public class Dashboard extends AppCompatActivity
             startActivity(e);
 
         } else if (id == R.id.nav_barcode) {
-            Intent b = new Intent(Dashboard.this, Barcode.class);
+//            Intent b = new Intent(Dashboard.this, Barcode.class);
+            Intent b = new Intent(Dashboard.this, ScanProduct.class);
             startActivity(b);
         } else if (id == R.id.nav_help) {
             Intent h = new Intent(Dashboard.this, Help.class);

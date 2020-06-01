@@ -7,25 +7,25 @@
     tools:context=".activities.Help">
 
     <ImageView
+        android:id="@+id/one"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_alignParentTop="true"
         android:layout_marginTop="2dp"
-        android:src="@drawable/im"
         android:scaleType="fitXY"
-        android:id="@+id/one"/>
+        android:src="@drawable/im" />
+
     <TextView
+        android:id="@+id/text1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/text1"
-        android:textColor="@android:color/black"
-        android:text="@string/help"
         android:layout_below="@+id/one"
-        android:textSize="20dp"
         android:padding="@dimen/dimen"
+        android:text="@string/help"
         android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
-        android:textStyle="bold"
-        />
+        android:textColor="@android:color/black"
+        android:textSize="20dp"
+        android:textStyle="bold" />
 
 
     <ScrollView
@@ -33,18 +33,16 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/text1">
 
-
         <TextView
+            android:id="@+id/text2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/text2"
-            android:textColor="@android:color/black"
-            android:text="@string/subhelp"
             android:layout_below="@+id/text"
-            android:textSize="20dp"
             android:padding="@dimen/dimen"
+            android:text="@string/subhelp"
             android:textAppearance="@android:style/TextAppearance.DeviceDefault"
-            />
+            android:textColor="@android:color/black"
+            android:textSize="20dp" />
     </ScrollView>
 
 </RelativeLayout>
