@@ -33,6 +33,13 @@ import java.util.Date;
 
 public class AddItem extends AppCompatActivity {
     private static final String TAG = "AddItem";
+
+//    private static final String APP_KEY = "/29iu3F/TwMf";
+//    private static final String AUTHORIZATION_KEY = "Tp23V0y4v0Bm7Ao4";
+
+    private static final String APP_KEY = "/5T+M/PrPIlD";
+    private static final String AUTHORIZATION_KEY = "Vb51U6g4q7Ag1Gk3";
+
     private EditText productName, manufactureDate, expiryDate;
     private Button save;
     private RelativeLayout selectDate, selectTime;
@@ -156,9 +163,9 @@ public class AddItem extends AppCompatActivity {
     private void loadProductDetail() {
         if (helpers.isConnected(getApplicationContext())) {
             if (type.toLowerCase().contains("ean") || type.toLowerCase().contains("upc") || type.toLowerCase().contains("gtin") || type.toLowerCase().contains("apn") || type.toLowerCase().contains("jpn")) {
-                String signature = helpers.hmacSha1(code, "Tp23V0y4v0Bm7Ao4");
+                String signature = helpers.hmacSha1(code, AUTHORIZATION_KEY);
                 Log.e(TAG, "Signature is: " + signature);
-                String url = "https://www.digit-eyes.com/gtin/v2_0/?upcCode=" + code + "%20&field_names=all&language=en&app_key=/29iu3F/TwMf&signature=" + signature;
+                String url = "https://www.digit-eyes.com/gtin/v2_0/?upcCode=" + code + "%20&field_names=all&language=en&app_key=" + APP_KEY + "&signature=" + signature;
                 loadProduct(url);
             }
         } else {
@@ -184,6 +191,7 @@ public class AddItem extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Log.e(TAG, "Error: " + error.getMessage());
                         loading.setVisibility(View.GONE);
                         main.setVisibility(View.VISIBLE);
                         helpers.showError(AddItem.this, "ERROR!", "Sorry, couldn't load the product detail.\nPlease try again later.");
