@@ -49,7 +49,6 @@ public class AddItem extends AppCompatActivity {
         setContentView(R.layout.activity_add_item);
 
         Intent it = getIntent();
-
         if (it == null) {
             finish();
             return;
@@ -57,7 +56,6 @@ public class AddItem extends AppCompatActivity {
 
         code = it.getStringExtra("code");
         type = it.getStringExtra("type");
-
         if (code == null || type == null) {
             finish();
             return;
