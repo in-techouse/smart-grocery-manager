@@ -13,4 +13,43 @@
     <string name="menu_help">Help</string>
     <string name="barcode_label">Scan Product BarCode</string>
     <string name="add_item">Add Product</string>
+
+
+    <string name="help">Help</string>
+    <string name="subhelp">
+        Our app provide help you to your food for expiry .There are some kind of feature available in our app. Like:\n\n
+
+
+
+
+•	Gallery\n
+•	Data Table\n
+•	Barcode\n
+•	Expiry Alert\n\n
+
+<b><u>Gallery:</u></b>\n
+            In this all the items details are appeared like: product name, expiry date and manufacture date.You can see expiration date of each product in the list as well as a visual indication of product which expire soon or already expire.
+If you want to delete the some item then select it .The delete option is appeared click on it’s the item is delete. In navigation bar are appeared on the top of the screen.\n\n
+<b><u>Data Table:</u></b>\n\n
+
+        Through data table you enter details of your product.\n\n There are four column in this.\n\n
+1.	Enter the product name.\n
+2.	Enter the expiry date.\n
+3.	Enter the manufacture date.\n
+4.	Enter the date of remainder.\n
+5.	Then click on ok button.\n
+The message is appeared of saved data.\n\n
+<b><u>Barcode:</u></b>\n\n
+        You can use your phone camera to scan barcode of product.Once barcode is added to a product you can just scan this barcode to perform an action instead of manual input.
+        By using barcode you cannot need to do any think you just scan your product barcode and your data will be inserted automatically in the table. Then click on set button the data will be saved.\n\n
+<b><u>Expiry Alert Notification:</u></b>\n\n
+
+                     You will get notification when product are near to expiration date or already expired. This notification appeared according to your set date which you will entered in the table when adding detail of your product.
+
+
+
+
+
+</string>
+
 </resources>
