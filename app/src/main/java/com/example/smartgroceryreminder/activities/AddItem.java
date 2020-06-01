@@ -1,8 +1,8 @@
 package com.example.smartgroceryreminder.activities;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -10,20 +10,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.smartgroceryreminder.R;
 import com.example.smartgroceryreminder.director.Helpers;
 
@@ -33,58 +25,26 @@ import java.util.Date;
 
 public class AddItem extends AppCompatActivity {
     private static final String TAG = "AddItem";
-
-//    private static final String APP_KEY = "/29iu3F/TwMf";
-//    private static final String AUTHORIZATION_KEY = "Tp23V0y4v0Bm7Ao4";
-
-    private static final String APP_KEY = "/5T+M/PrPIlD";
-    private static final String AUTHORIZATION_KEY = "Vb51U6g4q7Ag1Gk3";
-
-    private EditText productName, manufactureDate, expiryDate;
+    private EditText brand, productName;
     private Button save;
     private RelativeLayout selectDate, selectTime;
     private TextView date, time;
     private String strDate, strTime;
     private Helpers helpers;
-    private ScrollView main;
-    private LinearLayout loading;
-    private String code, type;
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
 
-        Intent it = getIntent();
-        if (it == null) {
-            finish();
-            return;
-        }
-
-        code = it.getStringExtra("code");
-        type = it.getStringExtra("type");
-        if (code == null || type == null) {
-            finish();
-            return;
-        }
-
-        Log.e(TAG, "Code: " + code);
-        Log.e(TAG, "Type: " + type);
-
-        main = findViewById(R.id.main);
-        loading = findViewById(R.id.loading);
+        brand = findViewById(R.id.brand);
         productName = findViewById(R.id.productName);
-        manufactureDate = findViewById(R.id.manufactureDate);
-        expiryDate = findViewById(R.id.expiryDate);
         selectDate = findViewById(R.id.selectDate);
         selectTime = findViewById(R.id.selectTime);
         save = findViewById(R.id.save);
         date = findViewById(R.id.date);
         time = findViewById(R.id.time);
-
-        productName.setText("SomeText");
-        manufactureDate.setText("SomeText");
-        expiryDate.setText("SomeText");
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,49 +117,7 @@ public class AddItem extends AppCompatActivity {
         });
 
         helpers = new Helpers();
-        loadProductDetail();
-    }
-
-    private void loadProductDetail() {
-        if (helpers.isConnected(getApplicationContext())) {
-            if (type.toLowerCase().contains("ean") || type.toLowerCase().contains("upc") || type.toLowerCase().contains("gtin") || type.toLowerCase().contains("apn") || type.toLowerCase().contains("jpn")) {
-                String signature = helpers.hmacSha1(code, AUTHORIZATION_KEY);
-                Log.e(TAG, "Signature is: " + signature);
-                String url = "https://www.digit-eyes.com/gtin/v2_0/?upcCode=" + code + "%20&field_names=all&language=en&app_key=" + APP_KEY + "&signature=" + signature;
-                loadProduct(url);
-            }
-        } else {
-            helpers.showError(AddItem.this, "ERROR!", "No internet connection found.\nConnect to a network and try again.");
-            loading.setVisibility(View.GONE);
-            main.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private void loadProduct(String url) {
-        // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(this);
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.e(TAG, "Product Detail: " + response);
-                        loading.setVisibility(View.GONE);
-                        main.setVisibility(View.VISIBLE);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e(TAG, "Error: " + error.getMessage());
-                        loading.setVisibility(View.GONE);
-                        main.setVisibility(View.VISIBLE);
-                        helpers.showError(AddItem.this, "ERROR!", "Sorry, couldn't load the product detail.\nPlease try again later.");
-                    }
-                });
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
+        dialog = new ProgressDialog(this);
     }
 
     private boolean isValid() {

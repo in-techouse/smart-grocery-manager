@@ -17,37 +17,40 @@
         android:text="SAVE &amp; SET ALARM"
         android:textColor="@color/c1" />
 
-    <LinearLayout
-        android:id="@+id/loading"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:orientation="vertical">
-
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Please wait\nLoading product detail..."
-            android:textAlignment="center" />
-    </LinearLayout>
-
     <ScrollView
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/save"
-        android:layout_alignParentTop="true"
-        android:visibility="gone">
+        android:layout_alignParentTop="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="17dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginEnd="17dp"
+                android:hint="Brand">
+
+                <EditText
+                    android:id="@+id/brand"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:textColor="@color/colorPrimary" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginBottom="7dp"
+                android:background="@color/colorPrimary" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
@@ -61,44 +64,77 @@
                     android:id="@+id/productName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:focusable="false"
                     android:inputType="text"
                     android:textColor="@color/colorPrimary" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="7dp"
+                android:layout_marginBottom="7dp"
+                android:background="@color/colorPrimary" />
+
+            <RelativeLayout
+                android:id="@+id/selectManufactureDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="17dp"
                 android:layout_marginTop="7dp"
-                android:layout_marginEnd="17dp"
-                android:hint="Manufacture Date">
+                android:layout_marginEnd="17dp">
 
-                <EditText
+                <TextView
                     android:id="@+id/manufactureDate"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:focusable="false"
-                    android:inputType="date"
-                    android:textColor="@color/colorPrimary" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@id/dateMIcon"
+                    android:text="Select Manufacturing Date" />
 
-            <com.google.android.material.textfield.TextInputLayout
+                <ImageView
+                    android:id="@+id/dateMIcon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/calendar" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="3dp"
+                android:background="@color/colorPrimary" />
+
+            <RelativeLayout
+                android:id="@+id/selectExpiryDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="17dp"
                 android:layout_marginTop="7dp"
-                android:layout_marginEnd="17dp"
-                android:hint="Expiry Date">
+                android:layout_marginEnd="17dp">
 
-                <EditText
+                <TextView
                     android:id="@+id/expiryDate"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:focusable="false"
-                    android:inputType="date"
-                    android:textColor="@color/colorPrimary" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@id/dateEIcon"
+                    android:text="Select Expiry Date" />
+
+                <ImageView
+                    android:id="@+id/dateEIcon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/calendar" />
+
+            </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"

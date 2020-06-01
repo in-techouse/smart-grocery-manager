@@ -19,7 +19,8 @@
 
         <activity
             android:name=".activities.SplashScreen"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,7 +31,8 @@
             android:name=".activities.Dashboard"
             android:label="@string/app_name"
             android:parentActivityName=".activities.SplashScreen"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.smartgroceryreminder.activities.SplashScreen" />
@@ -38,22 +40,34 @@
         <activity
             android:name=".activities.Barcode"
             android:label="@string/barcode_label"
-            android:parentActivityName=".activities.Dashboard" />
+            android:parentActivityName=".activities.Dashboard"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.AddItem"
             android:label="@string/add_item"
-            android:parentActivityName=".activities.Dashboard" />
-        <activity android:name=".activities.Help" />
-        <activity android:name=".activities.Expiry" />
-        <activity android:name=".activities.GroceryItemsList" />
+            android:parentActivityName=".activities.Dashboard"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".activities.Help"
+            android:label="HELP"
+            android:parentActivityName=".activities.Dashboard"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".activities.Expiry"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".activities.GroceryItemsList"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.ScanProduct"
             android:label="Scan Product"
-            android:parentActivityName=".activities.Dashboard" />
+            android:parentActivityName=".activities.Dashboard"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".activities.AddItemAutomatic"
             android:label="@string/add_item"
-            android:parentActivityName=".activities.Dashboard" />
+            android:parentActivityName=".activities.Dashboard"
+            android:windowSoftInputMode="stateHidden" />
     </application>
 
 </manifest>

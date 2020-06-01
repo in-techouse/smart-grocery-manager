@@ -99,7 +99,7 @@ public class Barcode extends AppCompatActivity implements ZXingScannerView.Resul
         Log.e(TAG, rawResult.getText());
         Log.e(TAG, rawResult.getBarcodeFormat().toString());
         mScannerView.resumeCameraPreview(this);
-        Intent it = new Intent(Barcode.this, AddItem.class);
+        Intent it = new Intent(Barcode.this, AddItemAutomatic.class);
         it.putExtra("code", rawResult.getText());
         it.putExtra("type", rawResult.getBarcodeFormat().name());
         startActivity(it);
