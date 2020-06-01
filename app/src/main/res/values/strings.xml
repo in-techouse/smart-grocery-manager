@@ -11,4 +11,6 @@
     <string name="menu_expiry">Expiry</string>
     <string name="menu_barcode">Barcode</string>
     <string name="menu_help">Help</string>
+    <string name="barcode_label">Scan Product BarCode</string>
+    <string name="add_item">Add Product</string>
 </resources>

@@ -18,7 +18,7 @@ public class AdapterClass extends BaseAdapter {
     List<GroceryItems> datalist = new ArrayList<>();
     LayoutInflater inflater;
 
-    AdapterClass(Context c) {
+    public AdapterClass(Context c) {
         inflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         databasehelper dbHandler = new databasehelper(c);
         datalist = dbHandler.fetchAllData();

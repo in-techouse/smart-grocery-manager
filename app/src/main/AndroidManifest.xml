@@ -1,37 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.smartgroceryreminder">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
+        android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".activities.Barcode" />
-        <activity android:name=".activities.Help" />
-        <activity android:name=".activities.Expiry" />
-        <activity android:name=".activities.GroceryItemsList" />
-        <activity android:name=".activities.AddItem" />
+        android:theme="@style/AppTheme"
+        tools:ignore="AllowBackup">
+
         <activity
-            android:name=".activities.Dashboard"
-            android:label="@string/title_activity_navigation"
-            android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.smartgroceryreminder.activities.MainActivity" />
-        </activity>
-        <activity android:name=".activities.MainActivity">
+            android:name=".activities.SplashScreen"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".activities.Dashboard"
+            android:label="@string/app_name"
+            android:parentActivityName=".activities.SplashScreen"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.smartgroceryreminder.activities.SplashScreen" />
+        </activity>
+
+        <activity
+            android:name=".activities.Barcode"
+            android:label="@string/barcode_label"
+            android:parentActivityName=".activities.Dashboard" />
+
+        <activity
+            android:name=".activities.AddItem"
+            android:label="@string/add_item"
+            android:parentActivityName=".activities.Dashboard" />
+
+        <activity android:name=".activities.Help" />
+        <activity android:name=".activities.Expiry" />
+        <activity android:name=".activities.GroceryItemsList" />
+
     </application>
 
 </manifest>

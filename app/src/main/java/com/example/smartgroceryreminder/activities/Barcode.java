@@ -1,9 +1,18 @@
 package com.example.smartgroceryreminder.activities;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
@@ -13,14 +22,13 @@ import java.util.List;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
-public class Barcode extends AppCompatActivity implements ZXingScannerView.ResultHandler
-//        implements BarcodeScannerView.ActivityCallback
-{
-    private ZXingScannerView mScannerView;
+public class Barcode extends AppCompatActivity implements ZXingScannerView.ResultHandler {
     private static final String TAG = "BarCode";
-
-//    private ViewGroup mContentFrame;
-//    private BarcodeScannerView mScannerView;
+    private static final int PERMISSION_CODE = 10;
+    private final String[] PERMISSIONS = {
+            Manifest.permission.CAMERA,
+    };
+    private ZXingScannerView mScannerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,92 +38,91 @@ public class Barcode extends AppCompatActivity implements ZXingScannerView.Resul
         mScannerView.setAutoFocus(true);
         mScannerView.setAspectTolerance(0.5f);
         List<BarcodeFormat> barCodes = new ArrayList<>();
-//        BarcodeFormat format = new BarcodeFormat();
         mScannerView.setFormats(barCodes);
         setContentView(mScannerView);
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_barcode);
+        startScanner();
+    }
 
-//        Window window = getWindow();
-//        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
-//        mContentFrame = findViewById(R.id.layout_content);
-//        if (ActivityUtil.solicitarPermisos(this, Manifest.permission.CAMERA,
-//                R.string.text_alert, R.string.msg_camera_permission,
-//                Constants.PERMISSION_CAMERA)) {
-//            initCamera();
-//        }
-//        initCamera();
+    private boolean hasPermissions(Context c, String... permission) {
+        for (String p : permission) {
+            if (ActivityCompat.checkSelfPermission(c, p) != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mScannerView.setResultHandler(this); // Register ourselves as a handler for scan results.
-        mScannerView.startCamera();          // Start camera on resume
+        mScannerView.setResultHandler(this);
+    }
+
+    private void startScanner() {
+        if (hasPermissions(getApplicationContext(), PERMISSIONS)) {
+            mScannerView.startCamera();
+        } else {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(Barcode.this);
+            dialog.setMessage("To scan the product, you need to grant the camera permission.\nDo you allow SMART GROCERY REMINDER to access the camera?");
+            dialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    ActivityCompat.requestPermissions(Barcode.this, PERMISSIONS, PERMISSION_CODE);
+                }
+            });
+            dialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            });
+            dialog.show();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_CODE) {
+            startScanner();
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mScannerView.stopCamera();           // Stop camera on pause
+        mScannerView.stopCamera();
     }
 
     @Override
     public void handleResult(Result rawResult) {
-        // Do something with the result here
-        Log.e(TAG, rawResult.getText()); // Prints scan results
-        Log.e(TAG, rawResult.getBarcodeFormat().toString()); // Prints the scan format (qrcode, pdf417 etc.)
-
-        // If you would like to resume scanning, call this method below:
+        Log.e(TAG, rawResult.getText());
+        Log.e(TAG, rawResult.getBarcodeFormat().toString());
         mScannerView.resumeCameraPreview(this);
+        Intent it = new Intent(Barcode.this, AddItem.class);
+        Bundle bundle = new Bundle();
+//        bundle.putString("code", rawResult.getText());
+//        bundle.putString("type", rawResult.getBarcodeFormat().name());
+        it.putExtra("code", rawResult.getText());
+        it.putExtra("type", rawResult.getBarcodeFormat().name());
+        startActivity(it);
+        finish();
     }
-//
-//    private void initCamera() {
-//        mScannerView = new BarcodeScannerView(this);
-//        mContentFrame.addView(mScannerView);
-//        // Here setFormats
-//    }
-//
-//    private void startCamera() {
-//        if (mScannerView != null) {
-//            Log.e("BarCode", "Camera Started");
-//
-//            mScannerView.setResultHandler(this);
-//            mScannerView.startCamera();
-//        }
-//    }
-//
-//    private void stopCamera() {
-//        if (mScannerView != null) {
-//            mScannerView.stopCamera();
-//        }
-//    }
-//
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        startCamera();
-//    }
-//
-//    @Override
-//    public void onPause() {
-//        stopCamera();
-//        super.onPause();
-//    }
-//
-//    @Override
-//    public void onResult(Result result) {
-//        Log.e("BarCode", "Result: " + result.getText());
-//    }
-//
-//    @Override
-//    public void onErrorExit(Exception e) {
-//        Log.e("BarCode", "Excepton: " + e.getMessage());
-//    }
 
-//    @Override
-//    public void handleResult(Result rawResult) {
-//
-//    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: {
+                finish();
+                break;
+            }
+        }
+        return true;
+    }
 }

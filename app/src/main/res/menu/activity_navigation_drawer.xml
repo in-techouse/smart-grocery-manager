@@ -5,6 +5,10 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_barcode"
+            android:icon="@drawable/ic_search_black_24dp"
+            android:title="@string/menu_barcode" />
+        <item
             android:id="@+id/nav_additem"
             android:icon="@drawable/ic_add_black_24dp"
             android:title="@string/menu_additem" />
@@ -12,10 +16,6 @@
             android:id="@+id/nav_expiry"
             android:icon="@drawable/ic_format_list_bulleted_black_24dp"
             android:title="@string/menu_expiry" />
-        <item
-            android:id="@+id/nav_barcode"
-            android:icon="@drawable/ic_search_black_24dp"
-            android:title="@string/menu_barcode" />
         <item
             android:id="@+id/nav_help"
             android:icon="@drawable/ic_help_outline_black_24dp"
