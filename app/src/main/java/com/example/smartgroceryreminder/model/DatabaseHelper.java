@@ -2,8 +2,12 @@ package com.example.smartgroceryreminder.model;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -33,7 +37,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COL4 + " TEXT, " +
                 COL5 + " TEXT, " +
                 COL6 + " TEXT, " +
-                COL7 + " DATETIME )";
+                COL7 + " DATETIME, " +
+                "created_at DATETIME DEFAULT CURRENT_TIMESTAMP )";
         db.execSQL(createTable);
     }
 
@@ -53,16 +58,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(COL6, groceryItems.getExpiryDate());
         cv.put(COL7, groceryItems.getExpiryDate());
 
-
-        long result = db.insert(TABLE_NAME, null, cv);
-        return result;
+        return db.insert(TABLE_NAME, null, cv);
     }
 
-//    public Cursor getListContents() {
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        Cursor data = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
-//        return data;
-//    }
+    public List<GroceryItems> getListContents() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        List<GroceryItems> items = new ArrayList<>();
+        try {
+            Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+            if (cursor.moveToFirst()) {
+                while (!cursor.isAfterLast()) {
+                    GroceryItems item = new GroceryItems();
+                    item.setId(cursor.getInt(0));
+                    item.setBrand(cursor.getString(1));
+                    item.setName(cursor.getString(2));
+                    item.setImage(cursor.getString(3));
+                    item.setManufactureDate(cursor.getString(4));
+                    item.setExpiryDate(cursor.getString(5));
+                    item.setAlarm(cursor.getString(6));
+                    items.add(item);
+                    cursor.moveToNext();
+                }
+            }
+        } catch (Exception e) {
+
+        }
+
+        return items;
+    }
 
 //    public ArrayList<GroceryItems> fetchAllData() {
 //        ArrayList<GroceryItems> groceryItems = new ArrayList<>();

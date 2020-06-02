@@ -5,12 +5,7 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.smartgroceryreminder.adapters.AdapterClass;
-import com.example.smartgroceryreminder.model.GroceryItems;
 import com.example.smartgroceryreminder.R;
-import com.example.smartgroceryreminder.model.DatabaseHelper;
-
-import java.util.List;
 
 public class GroceryItemsList extends AppCompatActivity {
 
@@ -21,12 +16,12 @@ public class GroceryItemsList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grocery_items_list);
 
-        listView = findViewById(R.id.list);
-        AdapterClass dm = new AdapterClass(GroceryItemsList.this);
-        listView.setAdapter(dm);
-        DatabaseHelper dbHandler = new DatabaseHelper(GroceryItemsList.this);
-//        List<GroceryItems> list = dbHandler.fetchAllData();
-
+//        listView = findViewById(R.id.list);
+//        AdapterClass dm = new AdapterClass(GroceryItemsList.this);
+//        listView.setAdapter(dm);
+//        DatabaseHelper dbHandler = new DatabaseHelper(GroceryItemsList.this);
+////        List<GroceryItems> list = dbHandler.fetchAllData();
+//
 
     }
 }

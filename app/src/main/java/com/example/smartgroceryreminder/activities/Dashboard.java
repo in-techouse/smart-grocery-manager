@@ -1,7 +1,9 @@
 package com.example.smartgroceryreminder.activities;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -9,11 +11,27 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.smartgroceryreminder.R;
+import com.example.smartgroceryreminder.adapters.ProductAdapter;
+import com.example.smartgroceryreminder.director.Helpers;
+import com.example.smartgroceryreminder.model.DatabaseHelper;
+import com.example.smartgroceryreminder.model.GroceryItems;
 import com.google.android.material.navigation.NavigationView;
 
-public class Dashboard extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+import java.util.ArrayList;
+import java.util.List;
+
+public class Dashboard extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener {
+    private RecyclerView products;
+    private SwipeRefreshLayout refreshLayout;
+    private List<GroceryItems> list;
+    private Helpers helpers;
+    private DatabaseHelper databaseHelper;
+    private ProductAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +45,22 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+
+        refreshLayout = findViewById(R.id.refreshLayout);
+        products = findViewById(R.id.products);
+        products.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        list = new ArrayList<>();
+        helpers = new Helpers();
+        databaseHelper = new DatabaseHelper(getApplicationContext());
+        adapter = new ProductAdapter(getApplicationContext());
+        products.setAdapter(adapter);
+        refreshLayout.setOnRefreshListener(this);
+        loadData();
+    }
+
+    private void loadData() {
+        refreshLayout.setRefreshing(true);
+        new LoadProducts().execute();
     }
 
     @Override
@@ -58,6 +92,28 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onRefresh() {
+        loadData();
+    }
+
+    class LoadProducts extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            list = databaseHelper.getListContents();
+            Log.e("Dashboard", "List size: " + list.size());
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            adapter.setItems(list);
+            refreshLayout.setRefreshing(false);
+        }
     }
 }
 
