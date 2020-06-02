@@ -45,11 +45,9 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         if (id == R.id.nav_additem) {
             Intent a = new Intent(Dashboard.this, AddItem.class);
             startActivity(a);
-
         } else if (id == R.id.nav_expiry) {
             Intent e = new Intent(Dashboard.this, Expiry.class);
             startActivity(e);
-
         } else if (id == R.id.nav_barcode) {
             Intent b = new Intent(Dashboard.this, Barcode.class);
             startActivity(b);

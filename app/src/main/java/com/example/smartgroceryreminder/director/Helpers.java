@@ -45,6 +45,31 @@ public class Helpers {
         mDialog.show();
     }
 
+    public void showSuccess(final Activity activity, String title, String message) {
+        MaterialDialog mDialog = new MaterialDialog.Builder(activity)
+                .setTitle(title)
+                .setMessage(message)
+                .setCancelable(false)
+                .setPositiveButton("Okay", R.drawable.ic_action_tick, new MaterialDialog.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int which) {
+                        dialogInterface.dismiss();
+                        activity.finish();
+                    }
+                })
+                .setNegativeButton("Cancel", R.drawable.ic_action_close, new MaterialDialog.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int which) {
+                        dialogInterface.dismiss();
+                        activity.finish();
+                    }
+                })
+                .build();
+
+        // Show Dialog
+        mDialog.show();
+    }
+
     public String hmacSha1(String value, String key) {
         try {
             String type = "HmacSHA1";

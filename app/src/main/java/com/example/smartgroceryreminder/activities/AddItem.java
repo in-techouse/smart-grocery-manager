@@ -18,6 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.smartgroceryreminder.R;
 import com.example.smartgroceryreminder.director.Helpers;
+import com.example.smartgroceryreminder.model.DatabaseHelper;
+import com.example.smartgroceryreminder.model.GroceryItems;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -25,13 +27,14 @@ import java.util.Date;
 
 public class AddItem extends AppCompatActivity {
     private static final String TAG = "AddItem";
-    private EditText brand, productName;
+    private EditText brand, productName, useage;
     private Button save;
-    private RelativeLayout selectDate, selectTime;
-    private TextView date, time;
-    private String strDate, strTime;
+    private RelativeLayout selectManufactureDate, selectExpiryDate, selectDate, selectTime;
+    private TextView manufactureDate, expiryDate, date, time;
+    private String strBrand, strProductName, strUseage, strManufactureDate, strExpiryDate, strDate, strTime, strFinalDate, strFinalTime, strAlarmDateTime;
     private Helpers helpers;
     private ProgressDialog dialog;
+    private DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,23 +43,103 @@ public class AddItem extends AppCompatActivity {
 
         brand = findViewById(R.id.brand);
         productName = findViewById(R.id.productName);
+        useage = findViewById(R.id.useage);
+        selectManufactureDate = findViewById(R.id.selectManufactureDate);
+        selectExpiryDate = findViewById(R.id.selectExpiryDate);
         selectDate = findViewById(R.id.selectDate);
         selectTime = findViewById(R.id.selectTime);
         save = findViewById(R.id.save);
+        manufactureDate = findViewById(R.id.manufactureDate);
+        expiryDate = findViewById(R.id.expiryDate);
         date = findViewById(R.id.date);
         time = findViewById(R.id.time);
+
+        databaseHelper = new DatabaseHelper(getApplicationContext());
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 boolean valid = isValid();
-
                 if (valid) {
                     // Save product to database
+                    GroceryItems item = new GroceryItems();
+                    item.setImage("");
+                    item.setBrand(strBrand);
+                    item.setName(strProductName);
+                    item.setUseage(strUseage);
+                    item.setManufactureDate(strManufactureDate);
+                    item.setExpiryDate(strExpiryDate);
+                    item.setAlarm(strAlarmDateTime);
+                    long result = databaseHelper.addData(item);
+                    Log.e(TAG, "Result: " + result);
+                    if (result > 0) {
+                        helpers.showSuccess(AddItem.this, "PRODUCT ADDED", strProductName + " has been saved to successfully.");
+                    } else {
+                        helpers.showError(AddItem.this, "ERROR", "Product not saved.\nSomething went wrong.\nPlease try again later.");
+                    }
                 }
             }
         });
 
+        selectManufactureDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog dialog = new DatePickerDialog(AddItem.this,
+                        android.R.style.Theme_DeviceDefault_Dialog,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                try {
+                                    month = month + 1;
+                                    Log.e(TAG, "onDateSet: mm/dd/yy: " + month + "/" + dayOfMonth + "/" + year);
+                                    String strDate = month + "/" + dayOfMonth + "/" + year;
+                                    manufactureDate.setText(strDate);
+                                    SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+                                    Date d = format.parse(strDate);
+                                    strDate = new SimpleDateFormat("EEE, dd, MMM-yyyy").format(d);
+                                    manufactureDate.setText(strDate);
+                                } catch (Exception e) {
+                                    Log.e(TAG, "Date parsing Exception: " + e.getMessage());
+                                }
+                            }
+                        }, year, month, day);
+                dialog.show();
+            }
+        });
+
+        selectExpiryDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog dialog = new DatePickerDialog(AddItem.this,
+                        android.R.style.Theme_DeviceDefault_Dialog,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                                try {
+                                    month = month + 1;
+                                    Log.e(TAG, "onDateSet: mm/dd/yy: " + month + "/" + dayOfMonth + "/" + year);
+                                    String strDate = month + "/" + dayOfMonth + "/" + year;
+                                    expiryDate.setText(strDate);
+                                    SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+                                    Date d = format.parse(strDate);
+                                    strDate = new SimpleDateFormat("EEE, dd, MMM-yyyy").format(d);
+                                    expiryDate.setText(strDate);
+                                } catch (Exception e) {
+                                    Log.e(TAG, "Date parsing Exception: " + e.getMessage());
+                                }
+                            }
+                        }, year, month, day);
+                dialog.show();
+            }
+        });
 
         selectDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +158,7 @@ public class AddItem extends AppCompatActivity {
                                     Log.e(TAG, "onDateSet: mm/dd/yy: " + month + "/" + dayOfMonth + "/" + year);
                                     String strDate = month + "/" + dayOfMonth + "/" + year;
                                     date.setText(strDate);
+                                    strFinalDate = strDate;
                                     SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
                                     Date d = format.parse(strDate);
                                     strDate = new SimpleDateFormat("EEE, dd, MMM-yyyy").format(d);
@@ -106,6 +190,7 @@ public class AddItem extends AppCompatActivity {
                             Log.e(TAG, "Time Parsed: " + d.toString());
                             strTime = new SimpleDateFormat("hh:mm aa").format(d);
                             Log.e(TAG, "Time Formatted: " + strTime);
+                            strFinalTime = strTime;
                             time.setText(strTime);
                         } catch (Exception e) {
                             Log.e(TAG, "Time parsing exception: " + e.getMessage());
@@ -122,9 +207,28 @@ public class AddItem extends AppCompatActivity {
 
     private boolean isValid() {
         boolean flag = true;
+        strBrand = brand.getText().toString();
+        strProductName = productName.getText().toString();
+        strUseage = useage.getText().toString();
+        strManufactureDate = manufactureDate.getText().toString();
+        strExpiryDate = expiryDate.getText().toString();
         strDate = date.getText().toString();
         strTime = time.getText().toString();
+        strAlarmDateTime = strFinalDate + " " + strFinalTime;
         String error = "";
+        if (strProductName.length() < 1) {
+            productName.setError("Product name is required");
+            flag = false;
+        }
+        if (strManufactureDate == null || strManufactureDate.length() < 1 || strManufactureDate.equals("Select Manufacturing Date")) {
+            error = error + "*Select product manufacturing date.\n";
+            flag = false;
+        }
+        if (strExpiryDate == null || strExpiryDate.length() < 1 || strExpiryDate.equals("Select Expiry Date")) {
+            error = error + "*Select product expiry date.\n";
+            flag = false;
+        }
+
         if (strDate == null || strDate.length() < 1 || strDate.equals("Select Alarm Date")) {
             error = error + "*Select product alarm date.\n";
             flag = false;

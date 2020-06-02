@@ -39,8 +39,11 @@ import java.util.Date;
 public class AddItemAutomatic extends AppCompatActivity {
     private static final String TAG = "AddItem";
 
-    private static final String APP_KEY = "/29iu3F/TwMf";
-    private static final String AUTHORIZATION_KEY = "Tp23V0y4v0Bm7Ao4";
+    private static final String APP_KEY = "/75CdiYFv7qz";
+    private static final String AUTHORIZATION_KEY = "Fv03K3h9z9Gk1Yz7";
+
+//    private static final String APP_KEY = "/29iu3F/TwMf";
+//    private static final String AUTHORIZATION_KEY = "Tp23V0y4v0Bm7Ao4";
 
 //    private static final String APP_KEY = "/5T+M/PrPIlD";
 //    private static final String AUTHORIZATION_KEY = "Vb51U6g4q7Ag1Gk3";
@@ -202,8 +205,10 @@ public class AddItemAutomatic extends AppCompatActivity {
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             if (jsonObject.has("return_message")) {
-                                helpers.showError(AddItemAutomatic.this, "ERROR!", "Sorry, couldn't load the product detail.\nPlease try again later.");
-                                return;
+                                if (!jsonObject.getString("return_message").equals("Success")) {
+                                    helpers.showError(AddItemAutomatic.this, "ERROR!", "Sorry, couldn't load the product detail.\nPlease try again later.");
+                                    return;
+                                }
                             }
                             String strImage = "";
                             String strBrand = "";

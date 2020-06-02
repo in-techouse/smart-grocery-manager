@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.example.smartgroceryreminder.model.GroceryItems;
 import com.example.smartgroceryreminder.R;
-import com.example.smartgroceryreminder.model.databasehelper;
+import com.example.smartgroceryreminder.model.DatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +20,8 @@ public class AdapterClass extends BaseAdapter {
 
     public AdapterClass(Context c) {
         inflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        databasehelper dbHandler = new databasehelper(c);
-        datalist = dbHandler.fetchAllData();
+        DatabaseHelper dbHandler = new DatabaseHelper(c);
+//        datalist = dbHandler.fetchAllData();
     }
 
     @Override
@@ -32,16 +32,16 @@ public class AdapterClass extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View v = inflater.inflate(R.layout.content_navigation, null);
-        GroceryItems temp = datalist.get(position);
-        TextView name = v.findViewById(R.id.name);
-        TextView manufacture_date = v.findViewById(R.id.manufacture_date);
-        TextView expiry_date = v.findViewById(R.id.expiry_date);
-        String name_of_product = temp.getPname();
-        String manufacture_date_of_product = temp.getManufacture();
-        String expiry_date_of_product = temp.getExpiry();
-        name.setText(name_of_product);
-        manufacture_date.setText(manufacture_date_of_product);
-        expiry_date.setText(expiry_date_of_product);
+//        GroceryItems temp = datalist.get(position);
+//        TextView name = v.findViewById(R.id.name);
+//        TextView manufacture_date = v.findViewById(R.id.manufacture_date);
+//        TextView expiry_date = v.findViewById(R.id.expiry_date);
+//        String name_of_product = temp.getPname();
+//        String manufacture_date_of_product = temp.getManufacture();
+//        String expiry_date_of_product = temp.getExpiry();
+//        name.setText(name_of_product);
+//        manufacture_date.setText(manufacture_date_of_product);
+//        expiry_date.setText(expiry_date_of_product);
         return v;
     }
 
