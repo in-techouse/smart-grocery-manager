@@ -13,8 +13,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.example.smartgroceryreminder.R;
 import com.google.android.material.navigation.NavigationView;
 
-public class Dashboard extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class Dashboard extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,8 +23,7 @@ public class Dashboard extends AppCompatActivity
         setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
@@ -44,7 +42,6 @@ public class Dashboard extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle Dashboard view item clicks here.
         int id = item.getItemId();
-
         if (id == R.id.nav_additem) {
             Intent a = new Intent(Dashboard.this, AddItem.class);
             startActivity(a);
@@ -54,13 +51,11 @@ public class Dashboard extends AppCompatActivity
             startActivity(e);
 
         } else if (id == R.id.nav_barcode) {
-//            Intent b = new Intent(Dashboard.this, Barcode.class);
-            Intent b = new Intent(Dashboard.this, ScanProduct.class);
+            Intent b = new Intent(Dashboard.this, Barcode.class);
             startActivity(b);
         } else if (id == R.id.nav_help) {
             Intent h = new Intent(Dashboard.this, Help.class);
             startActivity(h);
-
         }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

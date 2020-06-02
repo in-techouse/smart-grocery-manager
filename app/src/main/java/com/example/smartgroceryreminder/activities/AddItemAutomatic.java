@@ -10,12 +10,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
@@ -24,8 +26,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.example.smartgroceryreminder.R;
 import com.example.smartgroceryreminder.director.Helpers;
+
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -40,15 +45,16 @@ public class AddItemAutomatic extends AppCompatActivity {
     private static final String APP_KEY = "/5T+M/PrPIlD";
     private static final String AUTHORIZATION_KEY = "Vb51U6g4q7Ag1Gk3";
 
-    private EditText productName, manufactureDate, expiryDate;
+    private EditText brand, productName, useage, manufactureDate, expiryDate;
     private Button save;
-    private RelativeLayout selectDate, selectTime;
+    private RelativeLayout selectDate, selectTime, selectScan;
     private TextView date, time;
     private String strDate, strTime;
     private Helpers helpers;
     private ScrollView main;
     private LinearLayout loading;
     private String code, type;
+    private ImageView productImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,24 +79,24 @@ public class AddItemAutomatic extends AppCompatActivity {
 
         main = findViewById(R.id.main);
         loading = findViewById(R.id.loading);
+        productImage = findViewById(R.id.productImage);
+        brand = findViewById(R.id.brand);
         productName = findViewById(R.id.productName);
+        useage = findViewById(R.id.useage);
         manufactureDate = findViewById(R.id.manufactureDate);
         expiryDate = findViewById(R.id.expiryDate);
         selectDate = findViewById(R.id.selectDate);
         selectTime = findViewById(R.id.selectTime);
+        selectScan = findViewById(R.id.selectScan);
         save = findViewById(R.id.save);
         date = findViewById(R.id.date);
         time = findViewById(R.id.time);
 
-        productName.setText("Something");
-        manufactureDate.setText("Something");
-        expiryDate.setText("Something");
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 boolean valid = isValid();
-
                 if (valid) {
                     // Save product to database
                 }
@@ -155,8 +161,16 @@ public class AddItemAutomatic extends AppCompatActivity {
             }
         });
 
+        selectScan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = new Intent(AddItemAutomatic.this, ScanProduct.class);
+                startActivityForResult(it, 300);
+            }
+        });
+
         helpers = new Helpers();
-        loadProductDetail();
+//        loadProductDetail();
     }
 
     private void loadProductDetail() {
@@ -185,6 +199,33 @@ public class AddItemAutomatic extends AppCompatActivity {
                         Log.e(TAG, "Product Detail: " + response);
                         loading.setVisibility(View.GONE);
                         main.setVisibility(View.VISIBLE);
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String strImage = "";
+                            String strBrand = "";
+                            String strProductName = "";
+                            String strUseage = "";
+                            if (jsonObject.has("image")) {
+                                strImage = jsonObject.getString("image");
+                                Glide.with(getApplicationContext()).load(strImage).into(productImage);
+                            } else {
+                                productImage.setVisibility(View.GONE);
+                            }
+                            if (jsonObject.has("brand")) {
+                                strBrand = jsonObject.getString("brand");
+                                brand.setText(strBrand);
+                            }
+                            if (jsonObject.has("description")) {
+                                strProductName = jsonObject.getString("description");
+                                productName.setText(strProductName);
+                            }
+                            if (jsonObject.has("useage")) {
+                                strUseage = jsonObject.getString("useage");
+                                useage.setText(strUseage);
+                            }
+                        } catch (Exception e) {
+                            helpers.showError(AddItemAutomatic.this, "ERROR!", "Sorry, couldn't load the product detail.\nPlease try again later.");
+                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -199,6 +240,14 @@ public class AddItemAutomatic extends AppCompatActivity {
 
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 300 && resultCode == RESULT_OK && data != null) {
+            Log.e(TAG, "Response Received : " + data.toString());
+        }
     }
 
     private boolean isValid() {

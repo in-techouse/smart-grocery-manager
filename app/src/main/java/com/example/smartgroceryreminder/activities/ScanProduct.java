@@ -1,6 +1,8 @@
 package com.example.smartgroceryreminder.activities;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,6 +30,7 @@ public class ScanProduct extends AppCompatActivity {
     private SurfaceView cameraView;
     private CameraSource cameraSource;
     private Helpers helpers;
+    private String result = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,14 +96,24 @@ public class ScanProduct extends AppCompatActivity {
                                     Log.e(TAG, item.getValue());
                                     stringBuilder.append(" ");
                                 }
-                                String result = stringBuilder.toString().toLowerCase();
+                                result = result + " " + stringBuilder.toString().toLowerCase();
                                 Log.e(TAG, "Result: " + result);
+                                searchDates();
                             }
                         }.run();
                     }
                 }
             });
         }
+    }
+
+    private void searchDates() {
+//        Intent returnIntent = new Intent();
+//        Bundle bundle = new Bundle();
+////        bundle.putSerializable("result", post);
+//        returnIntent.putExtras(bundle);
+//        setResult(Activity.RESULT_OK, returnIntent);
+//        finish();
     }
 
     @Override
@@ -126,6 +139,8 @@ public class ScanProduct extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        Intent returnIntent = new Intent();
+        setResult(Activity.RESULT_CANCELED, returnIntent);
         finish();
     }
 
@@ -133,6 +148,8 @@ public class ScanProduct extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home: {
+                Intent returnIntent = new Intent();
+                setResult(Activity.RESULT_CANCELED, returnIntent);
                 finish();
                 break;
             }
