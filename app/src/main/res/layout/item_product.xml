@@ -68,31 +68,7 @@
                 android:textColor="@color/colorPrimaryDark" />
         </RelativeLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginBottom="3dp"
-            android:background="@color/colorPrimaryDark" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Usage"
-                android:textColor="@color/colorPrimaryDark"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/useage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimaryDark" />
-        </LinearLayout>
 
         <View
             android:layout_width="match_parent"
@@ -110,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:text="Manufacturing Date"
+                android:text="Mf "
                 android:textColor="@color/colorPrimaryDark"
                 android:textStyle="bold" />
 
@@ -120,7 +96,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:text="Manufacturing Date"
+                android:text="Mf "
                 android:textColor="@color/colorPrimaryDark" />
         </RelativeLayout>
 
@@ -140,7 +116,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:text="Expiry Date"
+                android:text="Ex"
                 android:textColor="@color/colorPrimaryDark"
                 android:textStyle="bold" />
 
@@ -150,7 +126,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:text="Expiry Date"
+                android:text="Ex"
                 android:textColor="@color/colorPrimaryDark" />
         </RelativeLayout>
 

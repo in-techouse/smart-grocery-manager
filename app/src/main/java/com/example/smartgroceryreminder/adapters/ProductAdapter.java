@@ -63,9 +63,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
         if (item.getBrand() != null && item.getBrand().length() > 0) {
             holder.brand.setText(item.getBrand());
         }
-        if (item.getUseage() != null && item.getUseage().length() > 0) {
-            holder.useage.setText(item.getUseage());
-        }
         holder.manufactureDate.setText(item.getManufactureDate());
         holder.expiryDate.setText(item.getExpiryDate());
         try {
@@ -129,7 +126,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
 
     class ProductHolder extends RecyclerView.ViewHolder {
         ImageView image;
-        TextView productName, brand, useage, manufactureDate, expiryDate, alarmDateTime;
+        TextView productName, brand, manufactureDate, expiryDate, alarmDateTime;
         RelativeLayout delete;
 
         public ProductHolder(@NonNull View itemView) {
@@ -137,7 +134,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
             image = itemView.findViewById(R.id.image);
             productName = itemView.findViewById(R.id.productName);
             brand = itemView.findViewById(R.id.brand);
-            useage = itemView.findViewById(R.id.useage);
             manufactureDate = itemView.findViewById(R.id.manufactureDate);
             expiryDate = itemView.findViewById(R.id.expiryDate);
             alarmDateTime = itemView.findViewById(R.id.alarmDateTime);
