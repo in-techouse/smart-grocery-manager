@@ -134,7 +134,8 @@ public class AddItemAutomatic extends AppCompatActivity {
             strExpiryDate = sdf.format(d);
             SimpleDateFormat formatted = new SimpleDateFormat("yyyy-MM-dd");
             strExpiryFormatted = formatted.format(d);
-
+            manufactureDate.setText(strManufactureDate);
+            expiryDate.setText(strExpiryDate);
         } catch (Exception e) {
 
         }
