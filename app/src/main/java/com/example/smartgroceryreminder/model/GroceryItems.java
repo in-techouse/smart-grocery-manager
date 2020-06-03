@@ -2,12 +2,12 @@ package com.example.smartgroceryreminder.model;
 
 public class GroceryItems {
     private int id;
-    private String brand, name, useage, image, manufactureDate, expiryDate, alarm;
+    private String brand, name, useage, image, manufactureDate, expiryDate, alarm, expiryFormatted;
 
     public GroceryItems() {
     }
 
-    public GroceryItems(int id, String brand, String name, String useage, String image, String manufactureDate, String expiryDate, String alarm) {
+    public GroceryItems(int id, String brand, String name, String useage, String image, String manufactureDate, String expiryDate, String alarm, String expiryFormatted) {
         this.id = id;
         this.brand = brand;
         this.name = name;
@@ -16,6 +16,15 @@ public class GroceryItems {
         this.manufactureDate = manufactureDate;
         this.expiryDate = expiryDate;
         this.alarm = alarm;
+        this.expiryFormatted = expiryFormatted;
+    }
+
+    public String getExpiryFormatted() {
+        return expiryFormatted;
+    }
+
+    public void setExpiryFormatted(String expiryFormatted) {
+        this.expiryFormatted = expiryFormatted;
     }
 
     public String getAlarm() {

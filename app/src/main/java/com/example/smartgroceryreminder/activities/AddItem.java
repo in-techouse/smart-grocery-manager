@@ -1,7 +1,6 @@
 package com.example.smartgroceryreminder.activities;
 
 import android.app.DatePickerDialog;
-import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,9 +30,8 @@ public class AddItem extends AppCompatActivity {
     private Button save;
     private RelativeLayout selectManufactureDate, selectExpiryDate, selectDate, selectTime;
     private TextView manufactureDate, expiryDate, date, time;
-    private String strBrand, strProductName, strUseage, strManufactureDate, strExpiryDate, strDate, strTime, strFinalDate, strFinalTime, strAlarmDateTime;
+    private String strBrand, strProductName, strUseage, strManufactureDate, strExpiryDate, strExpiryFormatted, strDate, strTime, strFinalDate, strFinalTime, strAlarmDateTime;
     private Helpers helpers;
-    private ProgressDialog dialog;
     private DatabaseHelper databaseHelper;
 
     @Override
@@ -70,6 +68,7 @@ public class AddItem extends AppCompatActivity {
                     item.setManufactureDate(strManufactureDate);
                     item.setExpiryDate(strExpiryDate);
                     item.setAlarm(strAlarmDateTime);
+                    item.setExpiryFormatted(strExpiryFormatted);
                     long result = databaseHelper.addData(item);
                     Log.e(TAG, "Result: " + result);
                     if (result > 0) {
@@ -129,7 +128,10 @@ public class AddItem extends AppCompatActivity {
                                     String strDate = month + "/" + dayOfMonth + "/" + year;
                                     expiryDate.setText(strDate);
                                     SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+                                    SimpleDateFormat formatted = new SimpleDateFormat("yyyy-MM-dd");
                                     Date d = format.parse(strDate);
+                                    strExpiryFormatted = formatted.format(d);
+                                    Log.e(TAG, "Expiry Formatted Date is: " + strExpiryFormatted);
                                     strDate = new SimpleDateFormat("EEE, dd, MMM-yyyy").format(d);
                                     expiryDate.setText(strDate);
                                 } catch (Exception e) {
@@ -202,7 +204,6 @@ public class AddItem extends AppCompatActivity {
         });
 
         helpers = new Helpers();
-        dialog = new ProgressDialog(this);
     }
 
     private boolean isValid() {
@@ -215,6 +216,7 @@ public class AddItem extends AppCompatActivity {
         strDate = date.getText().toString();
         strTime = time.getText().toString();
         strAlarmDateTime = strFinalDate + " " + strFinalTime;
+        Log.e(TAG, "Alarm Date Time: " + strAlarmDateTime);
         String error = "";
         if (strProductName.length() < 1) {
             productName.setError("Product name is required");

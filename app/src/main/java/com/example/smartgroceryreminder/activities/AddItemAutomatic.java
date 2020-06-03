@@ -29,6 +29,7 @@ import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.smartgroceryreminder.R;
 import com.example.smartgroceryreminder.director.Helpers;
+import com.example.smartgroceryreminder.model.GroceryItems;
 
 import org.json.JSONObject;
 
@@ -52,12 +53,13 @@ public class AddItemAutomatic extends AppCompatActivity {
     private Button save;
     private RelativeLayout selectDate, selectTime, selectScan;
     private TextView date, time;
-    private String strDate, strTime;
+    private String strManufactureDate, strExpiryDate, strExpiryFormatted, strDate, strTime, strFinalDate, strFinalTime, strAlarmDateTime;
     private Helpers helpers;
     private ScrollView main;
     private LinearLayout loading;
     private String code, type;
     private ImageView productImage;
+    private GroceryItems item;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +97,7 @@ public class AddItemAutomatic extends AppCompatActivity {
         date = findViewById(R.id.date);
         time = findViewById(R.id.time);
 
+        item = new GroceryItems();
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -232,6 +235,11 @@ public class AddItemAutomatic extends AppCompatActivity {
                                 strUseage = jsonObject.getString("useage");
                                 useage.setText(strUseage);
                             }
+
+                            item.setImage(strImage);
+                            item.setBrand(strBrand);
+                            item.setName(strProductName);
+                            item.setUseage(strUseage);
                         } catch (Exception e) {
                             helpers.showError(AddItemAutomatic.this, "ERROR!", "Sorry, couldn't load the product detail.\nPlease try again later.");
                         }

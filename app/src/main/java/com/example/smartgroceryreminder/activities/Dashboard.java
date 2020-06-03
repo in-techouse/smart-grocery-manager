@@ -29,7 +29,6 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
     private RecyclerView products;
     private SwipeRefreshLayout refreshLayout;
     private List<GroceryItems> list;
-    private Helpers helpers;
     private DatabaseHelper databaseHelper;
     private ProductAdapter adapter;
 
@@ -50,9 +49,8 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         products = findViewById(R.id.products);
         products.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         list = new ArrayList<>();
-        helpers = new Helpers();
         databaseHelper = new DatabaseHelper(getApplicationContext());
-        adapter = new ProductAdapter(getApplicationContext());
+        adapter = new ProductAdapter(getApplicationContext(), Dashboard.this);
         products.setAdapter(adapter);
         refreshLayout.setOnRefreshListener(this);
         loadData();
