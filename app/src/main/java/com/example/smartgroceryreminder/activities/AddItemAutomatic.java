@@ -29,6 +29,7 @@ import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.example.smartgroceryreminder.R;
 import com.example.smartgroceryreminder.director.Helpers;
+import com.example.smartgroceryreminder.model.DatabaseHelper;
 import com.example.smartgroceryreminder.model.GroceryItems;
 
 import org.json.JSONObject;
@@ -63,13 +64,14 @@ public class AddItemAutomatic extends AppCompatActivity {
     private String code, type;
     private ImageView productImage;
     private GroceryItems item;
+    private DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item_automatic);
 
-        Intent it = getIntent();
+        final Intent it = getIntent();
         if (it == null) {
             finish();
             return;
@@ -85,6 +87,8 @@ public class AddItemAutomatic extends AppCompatActivity {
         Log.e(TAG, "Code: " + code);
         Log.e(TAG, "Type: " + type);
 
+
+        databaseHelper = new DatabaseHelper(getApplicationContext());
         main = findViewById(R.id.main);
         loading = findViewById(R.id.loading);
         productImage = findViewById(R.id.productImage);
@@ -108,9 +112,33 @@ public class AddItemAutomatic extends AppCompatActivity {
                 boolean valid = isValid();
                 if (valid) {
                     // Save product to database
+                    item.setManufactureDate(strManufactureDate);
+                    item.setExpiryDate(strExpiryDate);
+                    item.setAlarm(strAlarmDateTime);
+                    item.setExpiryFormatted(strExpiryFormatted);
+                    long result = databaseHelper.addData(item);
+                    Log.e(TAG, "Result: " + result);
+                    if (result > 0) {
+                        helpers.showSuccess(AddItemAutomatic.this, "PRODUCT ADDED", item.getName() + " has been saved to successfully.");
+                    } else {
+                        helpers.showError(AddItemAutomatic.this, "ERROR", "Product not saved.\nSomething went wrong.\nPlease try again later.");
+                    }
                 }
             }
         });
+
+        try {
+            Date d = Calendar.getInstance().getTime();
+            SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd, MMM-yyyy");
+            strManufactureDate = sdf.format(d);
+            strExpiryDate = sdf.format(d);
+            SimpleDateFormat formatted = new SimpleDateFormat("yyyy-MM-dd");
+            strExpiryFormatted = formatted.format(d);
+
+        } catch (Exception e) {
+
+        }
+
 
         selectDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,6 +157,7 @@ public class AddItemAutomatic extends AppCompatActivity {
                                     Log.e(TAG, "onDateSet: mm/dd/yy: " + month + "/" + dayOfMonth + "/" + year);
                                     String strDate = month + "/" + dayOfMonth + "/" + year;
                                     date.setText(strDate);
+                                    strFinalDate = strDate;
                                     SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
                                     Date d = format.parse(strDate);
                                     strDate = new SimpleDateFormat("EEE, dd, MMM-yyyy").format(d);
@@ -160,6 +189,7 @@ public class AddItemAutomatic extends AppCompatActivity {
                             Log.e(TAG, "Time Parsed: " + d.toString());
                             strTime = new SimpleDateFormat("hh:mm aa").format(d);
                             Log.e(TAG, "Time Formatted: " + strTime);
+                            strFinalTime = strTime;
                             time.setText(strTime);
                         } catch (Exception e) {
                             Log.e(TAG, "Time parsing exception: " + e.getMessage());

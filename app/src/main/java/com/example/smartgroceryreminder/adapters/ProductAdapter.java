@@ -2,6 +2,7 @@ package com.example.smartgroceryreminder.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +22,10 @@ import com.shreyaspatil.MaterialDialog.interfaces.DialogInterface;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductHolder> {
     private List<GroceryItems> items;
@@ -69,10 +72,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("mm/dd/yyyy hh:mm a");
             Date d = sdf.parse(item.getAlarm());
-            String alarmTime = new SimpleDateFormat("EEE, dd, MMM-yyyy hh:mm a").format(d);
-            holder.alarmDateTime.setText(alarmTime);
+            Date current = Calendar.getInstance().getTime();
+            holder.alarmDateTime.setText(daysDifference(current, d));
         } catch (Exception e) {
-            holder.alarmDateTime.setText(item.getAlarm());
+            holder.alarmDateTime.setText("N/A");
         }
 
         holder.delete.setOnClickListener(new View.OnClickListener() {
@@ -81,6 +84,19 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
                 deleteItem(item);
             }
         });
+    }
+
+    private String daysDifference(Date start, Date end) {
+        try {
+            long diff = TimeUnit.DAYS.convert(start.getTime() - end.getTime(), TimeUnit.MILLISECONDS);
+            Log.e("Adapter", "startDate : " + start.toString());
+            Log.e("Adapter", "endDate : " + end.toString());
+            Log.e("Adapter", "Difference : " + diff);
+            return "" + diff + " Days";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "N/A";
+        }
     }
 
     private void deleteItem(final GroceryItems item) {
