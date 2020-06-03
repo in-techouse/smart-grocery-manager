@@ -2,6 +2,7 @@ package com.example.smartgroceryreminder.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +53,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ProductHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ProductHolder holder, final int position) {
         final GroceryItems item = items.get(position);
         if (item.getImage() != null && item.getImage().length() > 0) {
             Glide.with(context).load(item.getImage()).into(holder.image);
@@ -76,7 +77,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteItem(item);
+                deleteItem(item, holder.getAdapterPosition());
             }
         });
     }
@@ -89,14 +90,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
             SimpleDateFormat sdf = new SimpleDateFormat("mm/dd/yyyy");
             Date start = sdf.parse(strDate);
             diff = TimeUnit.DAYS.convert(end.getTime() - start.getTime(), TimeUnit.MILLISECONDS);
-            return "" + diff + " Days";
+            return "" + diff;
         } catch (Exception e) {
             e.printStackTrace();
             return "N/A";
         }
     }
 
-    private void deleteItem(final GroceryItems item) {
+    private void deleteItem(final GroceryItems item, final int position) {
         MaterialDialog mDialog = new MaterialDialog.Builder(activity)
                 .setTitle("DELETE PRODUCT")
                 .setMessage("Are you sure to delete " + item.getName().toUpperCase() + "?")
@@ -105,6 +106,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
                     @Override
                     public void onClick(DialogInterface dialogInterface, int which) {
                         dialogInterface.dismiss();
+                        Log.e("Adapter", "Product Name: " + item.getName());
+                        Log.e("Adapter", "Position: " + position);
+                        databaseHelper.deleteItem(item);
+                        items.remove(position);
+                        notifyDataSetChanged();
                     }
                 })
                 .setNegativeButton("NO", R.drawable.ic_action_close, new MaterialDialog.OnClickListener() {
@@ -114,8 +120,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
                     }
                 })
                 .build();
-
-        // Show Dialog
         mDialog.show();
     }
 

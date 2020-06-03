@@ -122,50 +122,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return items;
     }
 
-//    public ArrayList<GroceryItems> fetchAllData() {
-//        ArrayList<GroceryItems> groceryItems = new ArrayList<>();
-//        SQLiteDatabase db = this.getReadableDatabase();
-//
-////        db.update()
-////        String s[] = new String[]{Title , Price};
-//        //db.rawQuery();
-//////        Cursor c = db.query(BooksTable , null , "email = ? AND password = ?" , new String[]{})
-////        String col[] = new String[]{COL1 , Price};
-//        /*************************Retrieve All Data**********************/
-//
-//        Cursor cursor = db.query(TABLE_NAME, null, null,
-//                null, null, null, null);
-//
-//        if (cursor.getCount() == 0) {
-//            Toast.makeText(c, "No data", Toast.LENGTH_SHORT).show();
-//        } else {
-//            cursor.moveToFirst();
-//            int i = 0;
-//            while (i < cursor.getCount()) {
-//                GroceryItems groceryItems1 = new GroceryItems();
-//                int id = cursor.getInt(0);
-//                groceryItems1.setId(id);
-//                groceryItems1.setPname(cursor.getString(1));
-//                groceryItems1.setManufacture(cursor.getString(2));
-//                groceryItems1.setExpiry(cursor.getString(3));
-//                groceryItems.add(groceryItems1);
-//                cursor.moveToNext();
-//                i++;
-//            }
-//        }
-//
-//        /*************************SEARCHING**********************/
-////        Cursor cursor1 = db.query(BooksTable , new String[]{Title , Price} , Title+" = ? AND Price <= ?" , new String[]{"NAME" , "2000"} , null , null , null);
-//////
-////        Cursor cursor2 = db.query(BooksTable, new String[]{Title, BookId }, "Id > ? AND Id < ?", new String[]{"2" , "50"}, null, null, null);
-////        cursor1.moveToFirst();
-////        while (!cursor1.isLast()) {
-////            Book book = new Book();
-////            book.setId(cursor1.getInt(1));
-////            book.setTitle(cursor1.getString(0));
-////            booksList.add(book);
-////            cursor1.moveToNext();
-////        }
-//        return groceryItems;
-//    }
+    public void deleteItem(GroceryItems item) {
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            int result = db.delete(TABLE_NAME, COL1 + "=" + item.getId(), null);
+            Log.e("Database", "Delete Result: " + result);
+        } catch (Exception e) {
+            Log.e("Database", "Exception: " + e.getMessage());
+        }
+    }
 }

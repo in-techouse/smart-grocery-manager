@@ -50,10 +50,11 @@
             android:layout_height="wrap_content">
 
             <TextView
+                android:id="@+id/brandLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
+                android:layout_alignParentTop="true"
                 android:text="Brand"
                 android:textColor="@color/colorPrimaryDark"
                 android:textStyle="bold" />
@@ -62,31 +63,19 @@
                 android:id="@+id/brand"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
+                android:layout_below="@id/brandLabel"
+                android:layout_alignParentStart="true"
                 android:text="Brand"
                 android:textColor="@color/colorPrimaryDark" />
-        </RelativeLayout>
 
-
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginBottom="3dp"
-            android:background="@color/colorPrimaryDark" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
             <TextView
+                android:id="@+id/mfdLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/brand"
                 android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:text="Mf "
+                android:text="MFD"
                 android:textColor="@color/colorPrimaryDark"
                 android:textStyle="bold" />
 
@@ -94,29 +83,18 @@
                 android:id="@+id/manufactureDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:text="Mf "
+                android:layout_below="@id/mfdLabel"
+                android:layout_alignParentStart="true"
+                android:text="MFD"
                 android:textColor="@color/colorPrimaryDark" />
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginBottom="3dp"
-            android:background="@color/colorPrimaryDark" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
             <TextView
+                android:id="@+id/expLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/manufactureDate"
                 android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:text="Ex"
+                android:text="EXP"
                 android:textColor="@color/colorPrimaryDark"
                 android:textStyle="bold" />
 
@@ -124,40 +102,39 @@
                 android:id="@+id/expiryDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:text="Ex"
-                android:textColor="@color/colorPrimaryDark" />
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginBottom="3dp"
-            android:background="@color/colorPrimaryDark" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_below="@id/expLabel"
                 android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:text="Days to expire"
-                android:textColor="@color/colorPrimaryDark"
-                android:textStyle="bold" />
+                android:text="EXP"
+                android:textColor="@color/colorPrimaryDark" />
 
-            <TextView
-                android:id="@+id/alarmDateTime"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:text="Alarm Date &amp; Time"
-                android:textColor="@color/colorPrimaryDark" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/alarmDateTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Alarm Date &amp; Time"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:layout_gravity="center"
+                    android:text="Days to expire"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
         </RelativeLayout>
 
         <View
