@@ -2,7 +2,6 @@ package com.example.smartgroceryreminder.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,8 +71,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("mm/dd/yyyy hh:mm a");
             Date d = sdf.parse(item.getAlarm());
-            Date current = Calendar.getInstance().getTime();
-            holder.alarmDateTime.setText(daysDifference(current, d));
+            holder.alarmDateTime.setText(daysDifference(d));
         } catch (Exception e) {
             holder.alarmDateTime.setText("N/A");
         }
@@ -86,12 +84,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
         });
     }
 
-    private String daysDifference(Date start, Date end) {
+    private String daysDifference(Date end) {
         try {
-            long diff = TimeUnit.DAYS.convert(start.getTime() - end.getTime(), TimeUnit.MILLISECONDS);
-            Log.e("Adapter", "startDate : " + start.toString());
-            Log.e("Adapter", "endDate : " + end.toString());
-            Log.e("Adapter", "Difference : " + diff);
+            long diff = 0;
+            Calendar calendar = Calendar.getInstance();
+            String strDate = (calendar.get(Calendar.MONTH) + 1) + "/" + calendar.get(Calendar.DAY_OF_MONTH) + "/" + calendar.get(Calendar.YEAR);
+            SimpleDateFormat sdf = new SimpleDateFormat("mm/dd/yyyy");
+            Date start = sdf.parse(strDate);
+            diff = TimeUnit.DAYS.convert(end.getTime() - start.getTime(), TimeUnit.MILLISECONDS);
             return "" + diff + " Days";
         } catch (Exception e) {
             e.printStackTrace();
