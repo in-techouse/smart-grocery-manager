@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="splashBg">#DAFAFA</color>
-    <color name="colorPrimary">#66F4F4</color>
-    <color name="colorPrimaryDark">#39FACE</color>
+    <color name="splashBg">#B3F0F5</color>
+    <color name="colorPrimary">#0FD6DD</color>
+    <color name="colorPrimaryDark">#6DE6EE</color>
     <color name="colorAccent">#D81B60</color>
-    <color name="c1">#FAF5F5</color>
+    <color name="c1">#FAF7F7</color>
     <color name="c2">#666f78</color>
     <color name="c3">#353e47</color>
 </resources>
