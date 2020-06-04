@@ -71,21 +71,21 @@ public class AddItemAutomatic extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item_automatic);
 
-        final Intent it = getIntent();
-        if (it == null) {
-            finish();
-            return;
-        }
-
-        code = it.getStringExtra("code");
-        type = it.getStringExtra("type");
-        if (code == null || type == null) {
-            finish();
-            return;
-        }
-
-        Log.e(TAG, "Code: " + code);
-        Log.e(TAG, "Type: " + type);
+//        final Intent it = getIntent();
+//        if (it == null) {
+//            finish();
+//            return;
+//        }
+//
+//        code = it.getStringExtra("code");
+//        type = it.getStringExtra("type");
+//        if (code == null || type == null) {
+//            finish();
+//            return;
+//        }
+//
+//        Log.e(TAG, "Code: " + code);
+//        Log.e(TAG, "Type: " + type);
 
 
         databaseHelper = new DatabaseHelper(getApplicationContext());
@@ -210,7 +210,9 @@ public class AddItemAutomatic extends AppCompatActivity {
         });
 
         helpers = new Helpers();
-        loadProductDetail();
+        loading.setVisibility(View.GONE);
+        main.setVisibility(View.VISIBLE);
+//        loadProductDetail();
     }
 
     private void loadProductDetail() {
@@ -220,6 +222,10 @@ public class AddItemAutomatic extends AppCompatActivity {
                 Log.e(TAG, "Signature is: " + signature);
                 String url = "https://www.digit-eyes.com/gtin/v2_0/?upcCode=" + code + "%20&field_names=all&language=en&app_key=" + APP_KEY + "&signature=" + signature;
                 loadProduct(url);
+            } else {
+                helpers.showError(AddItemAutomatic.this, "ERROR!", "Cannot load the product detail. Didn't got the UPC or EAN Code.");
+                loading.setVisibility(View.GONE);
+                main.setVisibility(View.VISIBLE);
             }
         } else {
             helpers.showError(AddItemAutomatic.this, "ERROR!", "No internet connection found.\nConnect to a network and try again.");

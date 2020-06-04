@@ -2,6 +2,7 @@ package com.example.smartgroceryreminder.activities;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -23,6 +25,8 @@ import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ScanProduct extends AppCompatActivity {
     private static final String TAG = "ScanProduct";
@@ -31,6 +35,8 @@ public class ScanProduct extends AppCompatActivity {
     private CameraSource cameraSource;
     private Helpers helpers;
     private String result = "";
+    private List<String> query;
+    private int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +45,50 @@ public class ScanProduct extends AppCompatActivity {
         cameraView = findViewById(R.id.surface_view);
 
         helpers = new Helpers();
+        query = new ArrayList<>();
+        // Manufacturing Date
+        query.add("Manufacture Date".toLowerCase());
+        query.add("Date Manufacture".toLowerCase());
+        query.add("Date of Manufacture".toLowerCase());
+        query.add("Manufacturing Date".toLowerCase());
+        query.add("MFG".toLowerCase());
+        query.add("MFD".toLowerCase());
+        query.add("MFG Date".toLowerCase());
+        query.add("MFG. Date".toLowerCase());
+        query.add("M.F.G".toLowerCase());
+        // Expiry Date
+        query.add("Expiry Date".toLowerCase());
+        query.add("Date Expiry".toLowerCase());
+        query.add("Date of Expiry".toLowerCase());
+        query.add("EXP".toLowerCase());
+        query.add("EXP Date".toLowerCase());
+        query.add("EXP. Date".toLowerCase());
+        query.add("E.X.P".toLowerCase());
+        query.add("BB".toLowerCase());
+        query.add("BBE".toLowerCase());
+        query.add("B.B".toLowerCase());
+        query.add("B.B.E".toLowerCase());
+        query.add("Best Before".toLowerCase());
+        query.add("Use by".toLowerCase());
+        query.add("Use before".toLowerCase());
+        startScanning();
+        AlertDialog.Builder dialog = new AlertDialog.Builder(ScanProduct.this);
+        dialog.setMessage("Hold the mobile on the MANUFACTURE & EXPIRY DATE, upto 30 seconds to do a clean and accurate scan.");
+        dialog.setPositiveButton("OKAY", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
+        dialog.setNegativeButton("I can't", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finish();
+            }
+        });
+        dialog.show();
+    }
 
+    private void startScanning() {
         TextRecognizer textRecognizer = new TextRecognizer.Builder(getApplicationContext()).build();
         if (!textRecognizer.isOperational()) {
             Log.e(TAG, "Detector dependencies are not yet available");
@@ -79,13 +128,14 @@ public class ScanProduct extends AppCompatActivity {
             textRecognizer.setProcessor(new Detector.Processor<TextBlock>() {
                 @Override
                 public void release() {
+                    Log.e(TAG, "Release Called");
 
                 }
 
                 @Override
                 public void receiveDetections(Detector.Detections<TextBlock> detections) {
                     final SparseArray<TextBlock> items = detections.getDetectedItems();
-                    if (items.size() != 0) {
+                    if (count > 4 && count < 40 && items.size() != 0) {
                         new Runnable() {
                             @Override
                             public void run() {
@@ -93,21 +143,32 @@ public class ScanProduct extends AppCompatActivity {
                                 for (int i = 0; i < items.size(); ++i) {
                                     TextBlock item = items.valueAt(i);
                                     stringBuilder.append(item.getValue());
-                                    Log.e(TAG, item.getValue());
+                                    Log.e(TAG, "Value from item list: " + item.getValue());
                                     stringBuilder.append(" ");
                                 }
                                 result = result + " " + stringBuilder.toString().toLowerCase();
-                                Log.e(TAG, "Result: " + result);
-                                searchDates();
                             }
                         }.run();
                     }
+                    if (count > 40) {
+                        searchDates();
+                    } else {
+                        Log.e(TAG, "Count is: " + count + " with text: " + result);
+                    }
+                    count++;
                 }
             });
         }
     }
 
     private void searchDates() {
+        Log.e(TAG, "Search Started");
+        String strResult = result.toLowerCase();
+        for (String key : query) {
+            if (strResult.contains(key)) {
+                Log.e(TAG, "Key Found: " + key);
+            }
+        }
 //        Intent returnIntent = new Intent();
 //        Bundle bundle = new Bundle();
 ////        bundle.putSerializable("result", post);

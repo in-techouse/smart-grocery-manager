@@ -75,7 +75,7 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         // Handle Dashboard view item clicks here.
         int id = item.getItemId();
         if (id == R.id.nav_additem) {
-            Intent a = new Intent(Dashboard.this, AddItem.class);
+            Intent a = new Intent(Dashboard.this, AddItemAutomatic.class);
             startActivity(a);
         } else if (id == R.id.nav_expiry) {
             Intent e = new Intent(Dashboard.this, Expiry.class);
