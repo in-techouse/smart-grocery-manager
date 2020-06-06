@@ -1,6 +1,8 @@
 package com.example.smartgroceryreminder.model;
 
-public class GroceryItems {
+import java.io.Serializable;
+
+public class GroceryItems implements Serializable {
     private int id;
     private String brand, name, useage, image, manufactureDate, expiryDate, alarm, expiryFormatted;
 

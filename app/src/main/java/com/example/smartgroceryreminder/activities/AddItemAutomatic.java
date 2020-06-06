@@ -71,21 +71,21 @@ public class AddItemAutomatic extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item_automatic);
 
-//        final Intent it = getIntent();
-//        if (it == null) {
-//            finish();
-//            return;
-//        }
-//
-//        code = it.getStringExtra("code");
-//        type = it.getStringExtra("type");
-//        if (code == null || type == null) {
-//            finish();
-//            return;
-//        }
-//
-//        Log.e(TAG, "Code: " + code);
-//        Log.e(TAG, "Type: " + type);
+        final Intent it = getIntent();
+        if (it == null) {
+            finish();
+            return;
+        }
+
+        code = it.getStringExtra("code");
+        type = it.getStringExtra("type");
+        if (code == null || type == null) {
+            finish();
+            return;
+        }
+
+        Log.e(TAG, "Code: " + code);
+        Log.e(TAG, "Type: " + type);
 
 
         databaseHelper = new DatabaseHelper(getApplicationContext());
@@ -126,20 +126,6 @@ public class AddItemAutomatic extends AppCompatActivity {
                 }
             }
         });
-
-        try {
-            Date d = Calendar.getInstance().getTime();
-            SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd, MMM-yyyy");
-            strManufactureDate = sdf.format(d);
-            strExpiryDate = sdf.format(d);
-            SimpleDateFormat formatted = new SimpleDateFormat("yyyy-MM-dd");
-            strExpiryFormatted = formatted.format(d);
-            manufactureDate.setText(strManufactureDate);
-            expiryDate.setText(strExpiryDate);
-        } catch (Exception e) {
-
-        }
-
 
         selectDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -212,7 +198,7 @@ public class AddItemAutomatic extends AppCompatActivity {
         helpers = new Helpers();
         loading.setVisibility(View.GONE);
         main.setVisibility(View.VISIBLE);
-//        loadProductDetail();
+        loadProductDetail();
     }
 
     private void loadProductDetail() {
@@ -303,7 +289,17 @@ public class AddItemAutomatic extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 300 && resultCode == RESULT_OK && data != null) {
-            Log.e(TAG, "Response Received : " + data.toString());
+            Bundle bundle = data.getExtras();
+            if (bundle != null) {
+                GroceryItems temp = (GroceryItems) bundle.getSerializable("result");
+                if (temp != null) {
+                    item.setExpiryFormatted(temp.getExpiryFormatted());
+                    item.setExpiryDate(temp.getExpiryDate());
+                    item.setManufactureDate(temp.getManufactureDate());
+                    expiryDate.setText(item.getExpiryDate());
+                    manufactureDate.setText(item.getManufactureDate());
+                }
+            }
         }
     }
 

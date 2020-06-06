@@ -17,7 +17,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.smartgroceryreminder.R;
 import com.example.smartgroceryreminder.adapters.ProductAdapter;
-import com.example.smartgroceryreminder.director.Helpers;
 import com.example.smartgroceryreminder.model.DatabaseHelper;
 import com.example.smartgroceryreminder.model.GroceryItems;
 import com.google.android.material.navigation.NavigationView;
@@ -75,7 +74,7 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         // Handle Dashboard view item clicks here.
         int id = item.getItemId();
         if (id == R.id.nav_additem) {
-            Intent a = new Intent(Dashboard.this, AddItemAutomatic.class);
+            Intent a = new Intent(Dashboard.this, AddItem.class);
             startActivity(a);
         } else if (id == R.id.nav_expiry) {
             Intent e = new Intent(Dashboard.this, Expiry.class);

@@ -10,6 +10,9 @@ import com.example.smartgroceryreminder.R;
 import com.shreyaspatil.MaterialDialog.MaterialDialog;
 import com.shreyaspatil.MaterialDialog.interfaces.DialogInterface;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -98,32 +101,73 @@ public class Helpers {
         return new String(hexChars);
     }
 
-//    public String generateHashWithHmac1(String message, String key) {
-//        try {
-//            final String hashingAlgorithm = "HmacSHA1"; //or "HmacSHA1", "HmacSHA512"
-//            byte[] bytes = hmac(hashingAlgorithm, key.getBytes(), message.getBytes());
-//            final String messageDigest = bytesToHex(bytes);
-//            return messageDigest;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return "";
-//        }
-//    }
-//
-//    public static byte[] hmac(String algorithm, byte[] key, byte[] message) throws NoSuchAlgorithmException, InvalidKeyException {
-//        Mac mac = Mac.getInstance(algorithm);
-//        mac.init(new SecretKeySpec(key, algorithm));
-//        return mac.doFinal(message);
-//    }
-//
-//    public static String bytesToHex(byte[] bytes) {
-//        final char[] hexArray = "0123456789abcdef".toCharArray();
-//        char[] hexChars = new char[bytes.length * 2];
-//        for (int j = 0, v; j < bytes.length; j++) {
-//            v = bytes[j] & 0xFF;
-//            hexChars[j * 2] = hexArray[v >>> 4];
-//            hexChars[j * 2 + 1] = hexArray[v & 0x0F];
-//        }
-//        return new String(hexChars);
-//    }
+    public int calculateMonthNumber(String month) {
+        int number = 0;
+        List<String> months = new ArrayList<>();
+        months.add("Jan".toLowerCase());
+        months.add("Feb".toLowerCase());
+        months.add("Mar".toLowerCase());
+        months.add("Apr".toLowerCase());
+        months.add("May".toLowerCase());
+        months.add("Jun".toLowerCase());
+        months.add("Jul".toLowerCase());
+        months.add("Aug".toLowerCase());
+        months.add("Sep".toLowerCase());
+        months.add("Oct".toLowerCase());
+        months.add("Nov".toLowerCase());
+        months.add("Dec".toLowerCase());
+
+        switch (month.toLowerCase()) {
+            case "jan": {
+                number = 1;
+                break;
+            }
+            case "feb": {
+                number = 2;
+                break;
+            }
+            case "mar": {
+                number = 3;
+                break;
+            }
+            case "apr": {
+                number = 4;
+                break;
+            }
+            case "may": {
+                number = 5;
+                break;
+            }
+            case "jun": {
+                number = 6;
+                break;
+            }
+            case "jul": {
+                number = 7;
+                break;
+            }
+            case "aug": {
+                number = 8;
+                break;
+            }
+            case "sep": {
+                number = 9;
+                break;
+            }
+            case "oct": {
+                number = 10;
+                break;
+            }
+            case "nov": {
+                number = 11;
+                break;
+            }
+            case "dec": {
+                number = 12;
+                break;
+            }
+        }
+
+        return number;
+    }
 }
