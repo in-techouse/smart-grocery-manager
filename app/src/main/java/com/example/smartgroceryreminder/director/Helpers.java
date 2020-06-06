@@ -1,16 +1,22 @@
 package com.example.smartgroceryreminder.director;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Base64;
+import android.util.Log;
 
 import com.example.smartgroceryreminder.R;
+import com.example.smartgroceryreminder.receivers.AlarmReceiver;
 import com.shreyaspatil.MaterialDialog.MaterialDialog;
 import com.shreyaspatil.MaterialDialog.interfaces.DialogInterface;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.crypto.Mac;
@@ -169,5 +175,54 @@ public class Helpers {
         }
 
         return number;
+    }
+
+    public void setAlarm(Activity activity, String strDate, String strTime) {
+        int year = 0;
+        int month = 0;
+        int day = 0;
+        int hour = 0;
+        int minute = 0;
+        String[] datearray = strDate.split("/");
+        month = Integer.parseInt(datearray[0]);
+        day = Integer.parseInt(datearray[1]);
+        year = Integer.parseInt(datearray[2]);
+        Log.e("Alarm", "Date: " + strDate + " Time: " + strTime);
+        Log.e("Alarm", "Year: " + year);
+        Log.e("Alarm", "Month: " + month);
+        Log.e("Alarm", "Day: " + day);
+        String[] timearray = strTime.split(" ");
+        String[] tArray = timearray[0].split(":");
+        hour = Integer.parseInt(tArray[0]);
+        minute = Integer.parseInt(tArray[1]);
+        Log.e("Alarm", "AM/PM: " + timearray[1]);
+
+        if (timearray[1].equalsIgnoreCase("pm")) {
+            Log.e("Alarm", "PM Condition true");
+
+            hour = hour + 12;
+        }
+        Log.e("Alarm", "Hour: " + hour);
+        Log.e("Alarm", "Minutes: " + minute);
+
+        Calendar calendar = Calendar.getInstance();
+        Intent intent = new Intent(activity, AlarmReceiver.class);
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month - 1);
+        calendar.set(Calendar.DAY_OF_MONTH, day);
+        calendar.set(Calendar.HOUR, hour);
+        calendar.set(Calendar.MINUTE, minute);
+
+
+        Log.e("Alarm", "Alarm Time: " + calendar.getTime());
+
+        String number = (year + month) + "" + (day + hour) + minute + "";
+
+        int num = Integer.parseInt(number);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(activity, num, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
     }
 }

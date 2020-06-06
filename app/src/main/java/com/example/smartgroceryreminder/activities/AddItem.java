@@ -72,6 +72,7 @@ public class AddItem extends AppCompatActivity {
                     long result = databaseHelper.addData(item);
                     Log.e(TAG, "Result: " + result);
                     if (result > 0) {
+                        helpers.setAlarm(AddItem.this, strFinalDate, strFinalTime);
                         helpers.showSuccess(AddItem.this, "PRODUCT ADDED", strProductName + " has been saved to successfully.");
                     } else {
                         helpers.showError(AddItem.this, "ERROR", "Product not saved.\nSomething went wrong.\nPlease try again later.");

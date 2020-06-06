@@ -41,7 +41,6 @@ public class ScanProduct extends AppCompatActivity {
     private Helpers helpers;
     private String result = "";
     private List<String> manufacturingKeys, expiryKeys;
-    private TextRecognizer textRecognizer;
     private int count = 0;
     private SurfaceHolder.Callback callback;
     private GroceryItems item;
@@ -100,7 +99,7 @@ public class ScanProduct extends AppCompatActivity {
     }
 
     private void startScanning() {
-        textRecognizer = new TextRecognizer.Builder(getApplicationContext()).build();
+        TextRecognizer textRecognizer = new TextRecognizer.Builder(getApplicationContext()).build();
         if (!textRecognizer.isOperational()) {
             Log.e(TAG, "Detector dependencies are not yet available");
             helpers.showError(ScanProduct.this, "ERROR!", "Detector dependencies are not yet available");
@@ -284,7 +283,6 @@ public class ScanProduct extends AppCompatActivity {
 
         Stack<Character> yearStack = new Stack<>();
         Stack<Character> monthStack = new Stack<>();
-        Stack<Character> dayStack = new Stack<>();
         StringBuilder buffer = new StringBuilder(str);
         char[] dateChars = buffer.reverse().toString().toCharArray();
         for (char ch : dateChars) {
@@ -313,7 +311,8 @@ public class ScanProduct extends AppCompatActivity {
         for (int i = 0; i < yearStack.size(); i++) {
             try {
                 int tempInt = Integer.parseInt(strYear);
-                if (tempInt > 2019 && tempInt < 2100) {
+                Log.e(TAG, DATE_TAG + " Year is: " + tempInt);
+                if (tempInt >= 2018 && tempInt < 2100) {
                     if (intYear == -1) {
                         intYear = tempInt;
                     } else if (DATE_TAG.equals("EXP_DATE") && tempInt > intYear) {
@@ -322,6 +321,7 @@ public class ScanProduct extends AppCompatActivity {
                         intYear = tempInt;
                     }
                 }
+                Log.e(TAG, DATE_TAG + " Final Year is: " + intYear);
             } catch (Exception e) {
             }
             strYear = strYear.substring(1);
