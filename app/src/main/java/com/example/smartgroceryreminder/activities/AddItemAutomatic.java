@@ -116,7 +116,7 @@ public class AddItemAutomatic extends AppCompatActivity {
                     long result = databaseHelper.addData(item);
                     Log.e(TAG, "Result: " + result);
                     if (result > 0) {
-                        helpers.setAlarm(AddItemAutomatic.this, strFinalDate, strFinalTime);
+                        helpers.setAlarm(AddItemAutomatic.this, strFinalDate, strFinalTime, item);
                         helpers.showSuccess(AddItemAutomatic.this, "PRODUCT ADDED", item.getName() + " has been saved to successfully.");
                     } else {
                         helpers.showError(AddItemAutomatic.this, "ERROR", "Product not saved.\nSomething went wrong.\nPlease try again later.");

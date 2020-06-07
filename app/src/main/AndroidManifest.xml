@@ -69,6 +69,18 @@
             android:label="@string/add_item"
             android:parentActivityName=".activities.Dashboard"
             android:windowSoftInputMode="stateHidden" />
+
+        <receiver
+            android:name=".receivers.AlarmReceiver"
+            android:process=":remote" />
+        <!--        <receiver-->
+        <!--            android:name=".receivers.AlarmReceiver"-->
+        <!--            android:enabled="false">-->
+        <!--            <intent-filter android:priority="99999998">-->
+        <!--                <action android:name="android.intent.action.BOOT_COMPLETED" />-->
+        <!--                <action android:name="com.example.smartgroceryreminder.receivers.AlarmReceiver" />-->
+        <!--            </intent-filter>-->
+        <!--        </receiver>-->
     </application>
 
 </manifest>

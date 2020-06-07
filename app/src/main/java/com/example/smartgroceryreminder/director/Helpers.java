@@ -11,6 +11,7 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.example.smartgroceryreminder.R;
+import com.example.smartgroceryreminder.model.GroceryItems;
 import com.example.smartgroceryreminder.receivers.AlarmReceiver;
 import com.shreyaspatil.MaterialDialog.MaterialDialog;
 import com.shreyaspatil.MaterialDialog.interfaces.DialogInterface;
@@ -177,7 +178,7 @@ public class Helpers {
         return number;
     }
 
-    public void setAlarm(Activity activity, String strDate, String strTime) {
+    public void setAlarm(Context context, String strDate, String strTime, GroceryItems item) {
         int year = 0;
         int month = 0;
         int day = 0;
@@ -199,30 +200,31 @@ public class Helpers {
 
         if (timearray[1].equalsIgnoreCase("pm")) {
             Log.e("Alarm", "PM Condition true");
-
             hour = hour + 12;
         }
         Log.e("Alarm", "Hour: " + hour);
         Log.e("Alarm", "Minutes: " + minute);
 
-        Calendar calendar = Calendar.getInstance();
-        Intent intent = new Intent(activity, AlarmReceiver.class);
-        calendar.set(Calendar.YEAR, year);
-        calendar.set(Calendar.MONTH, month - 1);
-        calendar.set(Calendar.DAY_OF_MONTH, day);
-        calendar.set(Calendar.HOUR, hour);
-        calendar.set(Calendar.MINUTE, minute);
+        Calendar cal = Calendar.getInstance();
+        // add 30 seconds to the calendar object
+//        cal.add(Calendar.SECOND, 15);
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, month - 1);
+        cal.set(Calendar.DAY_OF_MONTH, day);
+        cal.set(Calendar.HOUR_OF_DAY, hour);
+        cal.set(Calendar.MINUTE, minute);
+        cal.set(Calendar.SECOND, 0);
 
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        intent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+        intent.putExtra("name", item.getName());
+        intent.putExtra("id", item.getId());
+        PendingIntent sender = PendingIntent.getBroadcast(context, 192837, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Log.e("Alarm", "Alarm Time: " + calendar.getTime());
-
-        String number = (year + month) + "" + (day + hour) + minute + "";
-
-        int num = Integer.parseInt(number);
-
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(activity, num, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager alarmManager = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        // Get the AlarmManager service
+        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        if (am != null)
+            am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), sender);
+        Log.e("Alarm", "Alarm Time: " + cal.getTime());
     }
 }
