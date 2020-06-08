@@ -4,6 +4,8 @@
     package="com.example.smartgroceryreminder">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -72,15 +74,9 @@
 
         <receiver
             android:name=".receivers.AlarmReceiver"
+            android:enabled="true"
+            android:exported="true"
             android:process=":remote" />
-        <!--        <receiver-->
-        <!--            android:name=".receivers.AlarmReceiver"-->
-        <!--            android:enabled="false">-->
-        <!--            <intent-filter android:priority="99999998">-->
-        <!--                <action android:name="android.intent.action.BOOT_COMPLETED" />-->
-        <!--                <action android:name="com.example.smartgroceryreminder.receivers.AlarmReceiver" />-->
-        <!--            </intent-filter>-->
-        <!--        </receiver>-->
     </application>
 
 </manifest>
