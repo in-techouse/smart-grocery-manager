@@ -207,13 +207,13 @@ public class Helpers {
 
         Calendar cal = Calendar.getInstance();
         // add 30 seconds to the calendar object
-//        cal.add(Calendar.SECOND, 15);
-        cal.set(Calendar.YEAR, year);
-        cal.set(Calendar.MONTH, month - 1);
-        cal.set(Calendar.DAY_OF_MONTH, day);
-        cal.set(Calendar.HOUR_OF_DAY, hour);
-        cal.set(Calendar.MINUTE, minute);
-        cal.set(Calendar.SECOND, 0);
+        cal.add(Calendar.SECOND, 15);
+//        cal.set(Calendar.YEAR, year);
+//        cal.set(Calendar.MONTH, month - 1);
+//        cal.set(Calendar.DAY_OF_MONTH, day);
+//        cal.set(Calendar.HOUR_OF_DAY, hour);
+//        cal.set(Calendar.MINUTE, minute);
+//        cal.set(Calendar.SECOND, 0);
 
         Intent intent = new Intent(context, AlarmReceiver.class);
         intent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
@@ -223,8 +223,12 @@ public class Helpers {
 
         // Get the AlarmManager service
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        if (am != null)
+        if (am != null) {
+            Log.e("Alarm", "Alarm Manager is not null");
             am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), sender);
+        } else {
+            Log.e("Alarm", "Alarm Manager is null");
+        }
         Log.e("Alarm", "Alarm Time: " + cal.getTime());
     }
 }
