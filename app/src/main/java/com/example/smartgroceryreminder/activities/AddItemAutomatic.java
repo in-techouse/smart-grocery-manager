@@ -65,6 +65,7 @@ public class AddItemAutomatic extends AppCompatActivity {
     private ImageView productImage;
     private GroceryItems item;
     private DatabaseHelper databaseHelper;
+    private boolean isWorking = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -219,6 +220,7 @@ public class AddItemAutomatic extends AppCompatActivity {
     }
 
     private void loadProduct(String url) {
+        isWorking = true;
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
         // Request a string response from the provided URL.
@@ -227,6 +229,7 @@ public class AddItemAutomatic extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         Log.e(TAG, "Product Detail: " + response);
+                        isWorking = false;
                         loading.setVisibility(View.GONE);
                         main.setVisibility(View.VISIBLE);
                         try {
@@ -276,6 +279,7 @@ public class AddItemAutomatic extends AppCompatActivity {
                         loading.setVisibility(View.GONE);
                         main.setVisibility(View.VISIBLE);
                         helpers.showError(AddItemAutomatic.this, "ERROR!", "Sorry, couldn't load the product detail.\nPlease try again later.");
+                        isWorking = false;
                     }
                 });
 
@@ -324,8 +328,9 @@ public class AddItemAutomatic extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        finish();
+        if (!isWorking) {
+            finish();
+        }
     }
 
     @Override
