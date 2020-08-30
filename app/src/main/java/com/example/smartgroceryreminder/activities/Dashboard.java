@@ -1,8 +1,13 @@
 package com.example.smartgroceryreminder.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
 
@@ -17,6 +22,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.smartgroceryreminder.R;
 import com.example.smartgroceryreminder.adapters.ProductAdapter;
+import com.example.smartgroceryreminder.director.Helpers;
 import com.example.smartgroceryreminder.model.DatabaseHelper;
 import com.example.smartgroceryreminder.model.GroceryItems;
 import com.google.android.material.navigation.NavigationView;
@@ -31,6 +37,7 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
     private DatabaseHelper databaseHelper;
     private ProductAdapter adapter;
 
+    @SuppressLint("BatteryLife")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +59,17 @@ public class Dashboard extends AppCompatActivity implements NavigationView.OnNav
         adapter = new ProductAdapter(getApplicationContext(), Dashboard.this);
         products.setAdapter(adapter);
         refreshLayout.setOnRefreshListener(this);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            String packageName = getPackageName();
+            PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
+            if (!pm.isIgnoringBatteryOptimizations(packageName)) {
+                Intent it = new Intent();
+                it.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+                it.setData(Uri.parse("package:" + packageName));
+                startActivity(it);
+            }
+        }
         loadData();
     }
 

@@ -446,6 +446,12 @@ public class ScanProduct extends AppCompatActivity {
         } else if (DATE_TAG.equals("MFD_DATE") && item.getManufactureDate() == null) {
             item.setManufactureDate("N/A");
         }
+        if (item.getExpiryDate() == null) {
+            item.setExpiryDate("N/A");
+        }
+        if (item.getManufactureDate() == null) {
+            item.setManufactureDate("N/A");
+        }
         if (item.getManufactureDate().equals("N/A") && item.getExpiryDate().equals("N/A")) {
             showError();
             return;

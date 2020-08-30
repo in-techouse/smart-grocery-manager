@@ -7,6 +7,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
+import android.os.Build;
+import android.os.PowerManager;
+import android.provider.Settings;
 import android.util.Base64;
 import android.util.Log;
 
@@ -16,12 +20,19 @@ import com.example.smartgroceryreminder.receivers.AlarmReceiver;
 import com.shreyaspatil.MaterialDialog.MaterialDialog;
 import com.shreyaspatil.MaterialDialog.interfaces.DialogInterface;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+
+import static android.content.Context.POWER_SERVICE;
 
 public class Helpers {
 
@@ -184,26 +195,26 @@ public class Helpers {
         int day = 0;
         int hour = 0;
         int minute = 0;
-        String[] datearray = strDate.split("/");
-        month = Integer.parseInt(datearray[0]);
-        day = Integer.parseInt(datearray[1]);
-        year = Integer.parseInt(datearray[2]);
-        Log.e("Alarm", "Date: " + strDate + " Time: " + strTime);
-        Log.e("Alarm", "Year: " + year);
-        Log.e("Alarm", "Month: " + month);
-        Log.e("Alarm", "Day: " + day);
-        String[] timearray = strTime.split(" ");
-        String[] tArray = timearray[0].split(":");
+        String[] dateArray = strDate.split("/");
+        month = Integer.parseInt(dateArray[0]);
+        day = Integer.parseInt(dateArray[1]);
+        year = Integer.parseInt(dateArray[2]);
+//        Log.e("Alarm", "Date: " + strDate + " Time: " + strTime);
+//        Log.e("Alarm", "Year: " + year);
+//        Log.e("Alarm", "Month: " + month);
+//        Log.e("Alarm", "Day: " + day);
+        String[] timeArray = strTime.split(" ");
+        String[] tArray = timeArray[0].split(":");
         hour = Integer.parseInt(tArray[0]);
         minute = Integer.parseInt(tArray[1]);
-        Log.e("Alarm", "AM/PM: " + timearray[1]);
+        Log.e("Alarm", "AM/PM: " + timeArray[1]);
 
-        if (timearray[1].equalsIgnoreCase("pm")) {
+        if (timeArray[1].equalsIgnoreCase("pm")) {
             Log.e("Alarm", "PM Condition true");
             hour = hour + 12;
         }
-        Log.e("Alarm", "Hour: " + hour);
-        Log.e("Alarm", "Minutes: " + minute);
+//        Log.e("Alarm", "Hour: " + hour);
+//        Log.e("Alarm", "Minutes: " + minute);
 
         Calendar cal = Calendar.getInstance();
         // add 30 seconds to the calendar object
@@ -217,18 +228,30 @@ public class Helpers {
 
         Intent intent = new Intent(context, AlarmReceiver.class);
         intent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+        intent.setAction("android.intent.action.NOTIFY");
+//        intent.addFlags(Intent.FLAG_RECEIVER_FOREGROUND);
         intent.putExtra("name", item.getName());
         intent.putExtra("id", item.getId());
-        PendingIntent sender = PendingIntent.getBroadcast(context, 192837, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent sender = PendingIntent.getBroadcast(context, item.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Get the AlarmManager service
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (am != null) {
             Log.e("Alarm", "Alarm Manager is not null");
-            am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), sender);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                am.setAlarmClock(new AlarmManager.AlarmClockInfo(cal.getTimeInMillis(), sender), sender);
+//                am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), sender);
+//                am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), sender);
+            } else {
+                am.setExact(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), sender);
+            }
         } else {
             Log.e("Alarm", "Alarm Manager is null");
         }
         Log.e("Alarm", "Alarm Time: " + cal.getTime());
+
+        DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss aa");
+        String text = formatter.format(new Date(cal.getTimeInMillis()));
+        Log.e("Alarm", "Alarm Time is: " + text);
     }
 }

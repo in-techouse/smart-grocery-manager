@@ -16,6 +16,7 @@ import com.example.smartgroceryreminder.activities.Expiry;
 public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.e("Alarm", "Call Receive in Receiver");
         String text = "Your product is going to expire soon.";
         String cId = "1";
         int id = 1;
